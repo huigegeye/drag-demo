@@ -76,23 +76,23 @@ export default {
 			this.getImgSize(this.url)
 			this.addImageEvents()
 			this.wheelZoom()
-			const wrapEl = this.$refs.refWrap
-			if (!wrapEl) return
-			addEvent(wrapEl, "mousewheel", this.onMouseWheel)
-			addEvent(wrapEl, "DOMMouseScroll", this.onMouseWheel)
-			addEvent(
-				document.documentElement,
-				"mousewheel",
-				this.preventDefaultScroll,
-				{ passive: false }
-			)
+			// const wrapEl = this.$refs.refWrap
+			// if (!wrapEl) return
+			// addEvent(wrapEl, "mousewheel", this.onMouseWheel)
+			// addEvent(wrapEl, "DOMMouseScroll", this.onMouseWheel)
+			// addEvent(
+			// 	document.documentElement,
+			// 	"mousewheel",
+			// 	this.preventDefaultScroll,
+			// 	{ passive: false }
+			// )
 
-			addEvent(
-				document.documentElement,
-				"DOMMouseScroll",
-				this.preventDefaultScroll,
-				{ passive: false }
-			)
+			// addEvent(
+			// 	document.documentElement,
+			// 	"DOMMouseScroll",
+			// 	this.preventDefaultScroll,
+			// 	{ passive: false }
+			// )
 		})
 	},
 	methods: {
@@ -120,29 +120,43 @@ export default {
 				this.$emit("update:imageState", "loaded")
 				this.parentW = maxWidth
 				this.parentH = maxHeight
-				let width, height
-				// 如果图片实际宽高比例 >= 显示宽高比例
-				if (imgRatio >= maxRatio) {
-					if (naturalWidth > maxWidth) {
-						width = maxWidth
-						height = (maxWidth / naturalWidth) * naturalHeight
-					} else {
-						width = naturalWidth
-						height = naturalHeight
-					}
-				} else {
-					if (naturalHeight > maxHeight) {
-						width = (maxHeight / naturalHeight) * naturalWidth
-						height = maxHeight
-					} else {
-						width = naturalWidth
-						height = naturalHeight
-					}
+
+
+				if(imgRatio >= maxRatio && naturalWidth > maxWidth){
+					this.scale = maxWidth / naturalWidth
+				}else if(naturalHeight > maxHeight){
+					this.scale = maxHeight / naturalHeight
+				}else{
+					this.scale = 1
 				}
-				this.x = (maxWidth - width) * 0.5
-				this.y = (maxHeight - height) * 0.5
-				this.imageW = width
-				this.imageH = height
+
+				// let width, height
+				// // 如果图片实际宽高比例 >= 显示宽高比例
+				// if (imgRatio >= maxRatio) {
+				// 	if (naturalWidth > maxWidth) {
+				// 		width = maxWidth
+				// 		height = (maxWidth / naturalWidth) * naturalHeight
+				// 		this.scale = maxWidth / naturalWidth
+				// 	} else {
+				// 		width = naturalWidth
+				// 		height = naturalHeight
+				// 	}
+				// } else {
+				// 	if (naturalHeight > maxHeight) {
+				// 		width = (maxHeight / naturalHeight) * naturalWidth
+				// 		height = maxHeight
+				// 		this.scale = maxHeight / naturalHeight
+				// 	} else {
+				// 		width = naturalWidth
+				// 		height = naturalHeight
+				// 	}
+				// }
+
+
+				this.x = (maxWidth - naturalWidth) * 0.5
+				this.y = (maxHeight - naturalHeight) * 0.5
+				this.imageW = naturalWidth
+				this.imageH = naturalHeight
 				this.imageInit = true
 			})
 		},
